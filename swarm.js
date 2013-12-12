@@ -1,4 +1,4 @@
-module.exports = function(myip, myport, parentip, parentport){
+var swarm = function(myip, myport, parentip, parentport){
     var me = [myip, myport], 
         parent = null,
         current = null,
@@ -56,3 +56,6 @@ module.exports = function(myip, myport, parentip, parentport){
     }
     return o;
 }
+
+__filename !== require.main.filename ? 
+        module.exports = swarm : swarm(process.argv[2], process.argv[3], process.argv[4], process.argv[5]);
