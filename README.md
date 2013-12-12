@@ -1,4 +1,2 @@
-discovery
+swarm
 =========
-
-Distributed data
