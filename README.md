@@ -2,10 +2,12 @@ swarm
 =========
 
 ````
-var node = require('./new.js')('127.0.0.1', 2120);
-var worker1 = require('./new.js')('127.0.0.1', 2121, '127.0.0.1', 2120);
-var worker2 = require('./new.js')('127.0.0.1', 2122, '127.0.0.1', 2120);
-var worker3 = require('./new.js')('127.0.0.1', 2123, '127.0.0.1', 2120);
+var swarm = require('./swarm.js');
+
+var node = swarm('127.0.0.1', 2120);
+var worker1 = swarm('127.0.0.1', 2121, '127.0.0.1', 2120);
+var worker2 = swarm('127.0.0.1', 2122, '127.0.0.1', 2120);
+var worker3 = swarm('127.0.0.1', 2123, '127.0.0.1', 2120);
 
 
 function upper(s){
