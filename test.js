@@ -1,6 +1,29 @@
-// parent
-var cluster = require('./core.js')({port: 2120});
-cluster.create
+var node = require('./new.js')('127.0.0.1', 2120);
+var worker1 = require('./new.js')('127.0.0.1', 2121, '127.0.0.1', 2120);
+var worker2 = require('./new.js')('127.0.0.1', 2122, '127.0.0.1', 2120);
+var worker3 = require('./new.js')('127.0.0.1', 2123, '127.0.0.1', 2120);
 
-// child
-var child = require('./core.js')({parent: ':2120', port: 2121});
+
+function upper(s){
+   return s.toUpperCase();
+}
+
+setTimeout(function(){ 
+	// distribute work
+	node.work(upper, ['this', 'is', 'some', 'stuff'], function(e, r){
+		if(e) throw e;
+		console.log(r);
+	})
+}, 1000);
+
+setTimeout(function(){ 
+	// round-robin work
+	node.next(upper, 'this', function(e, r){
+		if(e) throw e;
+		console.log(r);	
+	})
+	node.next(upper, 'is', function(e, r){
+		if(e) throw e;
+		console.log(r);	
+	})
+}, 2000);
