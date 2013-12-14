@@ -27,4 +27,12 @@ setTimeout(function(){
 		if(e) throw e;
 		console.log(r);	
 	})
+	node.next(upper, 'some', function(e, r){
+		if(e) throw e;
+		console.log(r);	
+	})
+	node.next(upper, 'stuff', function(e, r){
+		if(e) throw e;
+		console.log(r);	
+	})
 }, 2000);
