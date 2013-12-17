@@ -1,6 +1,14 @@
 swarm
 =========
 
+Distributed functions
+
+Setup remote host as node and start
+````
+$ cat id_rsa.pub | ssh user@ip "cat - >> ~/.ssh/authorized_keys"
+$ ssh user@ip "npm install dpweb/swarm && swarm 127.0.0.1 2121 parentip 2121"
+````
+
 ````
 var swarm = require('./swarm.js');
 

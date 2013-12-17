@@ -1,9 +1,6 @@
-var swarm = require('../swarm.js');
+var swarm = require('./swarm.js');
 
-var node = swarm('127.0.0.1', 2120);
-var worker1 = swarm('127.0.0.1', 2121, '127.0.0.1', 2120);
-var worker2 = swarm('127.0.0.1', 2122, '127.0.0.1', 2120);
-var worker3 = swarm('127.0.0.1', 2123, '127.0.0.1', 2120);
+var worker1 = swarm('127.0.0.1', 2121, '192.227.139.115', 8888);
 
 function upper(s){
    return s.toUpperCase();

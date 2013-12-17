@@ -1,0 +1,23 @@
+{
+  "name": "swarm",
+  "description": "Distributed functions",
+  "url": "http://github.com/dpweb/swarm",
+  "keywords": [
+    "nodejs"
+  ],
+  "author": {
+    "name": "C Borkert",
+    "email": "ILIKECHEESE@dpsw.info"
+  },
+  "main": "swarm.js",
+  "dependencies": {
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/dpweb/swarm.git"
+  },
+  "bin": {
+    "quick-server": "swarm.js"
+  },
+  "version": "0.0.1"
+}

@@ -1,30 +1,57 @@
 var swarm = function(myip, myport, parentip, parentport){
     var me = [myip, myport], 
-        parent = null,
-        current = null,
-        localdata = null, 
+        parent = null, current = null, data = null, 
         debug = process.env.debugswarm,
+        command = new Buffer[0, 1, 2, 3, 4, 5];
         buf = require('./buf.js');
 
+    function getinfo(){
+        var info = {};
+        for(i in os) 
+            info[i] = typeof(os[i])=='function' ? os[i]():os[i];
+        return info;
+    }
+
+    function resp(s){
+        if(s != 'OK') throw Error(s);
+    }
+
     var o = {
-        "children": [],
-        "curloc": 0,
+        "children": [], "curloc": 0,
         "start": function(){
-            var ch = this.children;
+            var that = this;
             buf.server(myip, myport, function(data){
-                var cmd = data.slice(0, 3), sdata = data.slice(3).toString();
-                if(cmd.toString() === 'NEW'){
-                    ch.push(sdata)
-                    console.log(me, 'children is', ch);
+                var payload = data.slice(1);
+                switch(data[0]){
+                    case command[1]: // new incoming from child
+                        that.children.push(payload);
+                        buf.send(parentip, parentport, new Buffer([1] + me), resp);
+                        return 'OK';
+                    case command[2]: // confirm from parent
+                        console.log('child is online', o.me = [ip, port]);
+                        return 'OK';
+                    case command[3]: // new job from parent
+                        var arr = payload.toString().split('DOL');
+                        var func = eval('global.f = ' + arr[0]);
+                        o.result = f.call(o, arr[1]);
+                        return 'OK';
+                    case command[4]: // results from job
+                        send(o.result);
+                        return 'OK';
+                    case command[5]: // status-info
+                        return 'OK';
+                    case else:  // invalid command
+                        return;
                 }
-                if(cmd.toString() === 'DOL'){
-                    var arr = sdata.split('DOL');
-                    var func = eval('global.f = ' + arr[0]);
-                    var result = f.call(o, arr[1]);
-                    return me + ' ' + result;
-                }
-                return 'OK';
             });
+            if(parentip || parentport){
+                    parent = [parentip, parentport];
+                    buf.send(parentip, parentport, new Buffer([1] + me), resp);
+                    console.log('Child Node is ONLINE', me, '=>', parent);
+            } else {
+                console.log('Parent Node is ONLINE', me);
+            }
+            return this;
         },
         "work": function(f, d, cb){
             if(!d) d = Array(this.children.length);
@@ -71,17 +98,9 @@ var swarm = function(myip, myport, parentip, parentport){
             return d.split(' ');
         }
     }
-    o.start();
 
-    if(parentip || parentport){
-        parent = [parentip, parentport];
-        buf.send(parentip, parentport, new Buffer('NEW' + me), function(){});
-        console.log('Child Node is ONLINE', me, '=>', parent);
-    } else {
-        console.log('Parent Node is ONLINE', me);
-    }
-    return o;
+    return o.start();
 }
 
-__filename !== require.main.filename ? 
-        module.exports = swarm : swarm(process.argv[2], process.argv[3], process.argv[4], process.argv[5]);
+__filename !== require.main.filename ?
+        module.exports = swarm : swarm.apply(null, process.argv.slice(2));
